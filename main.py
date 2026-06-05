@@ -1,8 +1,20 @@
-from fastapi import FastAPI
+from dataclasses import dataclass
 
-app = FastAPI()
+# 1. Это аналог struct в Rust. Мы жестко задаем типы полей.
+@dataclass
+class User:
+    user_id: int
+    name: str
+    email: str
+    is_active: bool = True  # Поле со значением по умолчанию
 
+# 2. Строгая функция. Мы говорим: "принимает ТОЛЬКО User, возвращает ТОЛЬКО str"
+def greet_user(user: User) -> str:
+    if not user.is_active:
+        return f"Пользователь {user.name} заблокирован."
+    
+    return f"Привет, {user.name} ({user.email})!"
 
-@app.get("/")
-def read_root():
-    return {"message": "Hello, Backend!"}
+# 3. Точка входа
+# if __name__ == "__main__":
+   
