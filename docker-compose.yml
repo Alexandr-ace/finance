@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: wb_parser
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  app:
+    build: .                # Говорит: "Собери образ из Dockerfile в текущей папке"
+    env_file:
+      - .env                # Передаем наши переменные (важно: DB_HOST должен быть 'db', а не 'localhost'!)
+    depends_on:
+      - db                  # Говорит: "Сначала запусти базу, потом приложение"
+
+volumes:
+  pgdata:
